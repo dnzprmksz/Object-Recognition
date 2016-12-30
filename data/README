@@ -1,0 +1,11 @@
+Each Matlab mat file contains an array of structures where each structure
+contains an object mask. Each structure has two fields:
+- class_name: class of the object
+- mask: binary mask for the object
+
+For example, for image 1, "load 1.mat" will load the masks and will
+create a variable called "masks" in the Matlab workspace. Image 1 has
+three objects that were manually marked. "length( masks )" shows the number
+of objects. "masks(1).class_name" contains the class label for object 1,
+and "masks(1).mask" contains the binary masks for that object. You can view
+the mask as "imshow( masks(1).mask )".
