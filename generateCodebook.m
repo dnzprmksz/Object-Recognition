@@ -21,10 +21,10 @@ function [Clusters, Codebook] = generateCodebook(DataLocation, ClusterCount, Gri
                x_end = i*GridSize;
                y_end = j*GridSize;
                % Extract grid/feature and calculate its descriptor.
-               % gridImage = image(x_start:x_end, y_start:y_end);
+               % gridImage = uint8(image(y_start:y_end, x_start:x_end));
                x = (x_start + x_end) / 2;
                y = (y_start + y_end) / 2;
-               grid = [x; y; GridSize; 0];
+               grid = [y; x; GridSize; 0];
                
                [~,d] = vl_sift(image, 'frames', grid);
                descriptors = cat(2, descriptors, d);
