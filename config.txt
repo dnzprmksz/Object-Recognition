@@ -1,0 +1,3 @@
+data/
+~/Documents/lib/vlfeat/toolbox/vl_setup
+~/Documents/lib/libsvm/
