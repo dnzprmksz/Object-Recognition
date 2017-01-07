@@ -20,7 +20,7 @@ DataLocation = fgetl(file);
 % representation and use SVM classifier to recognize the objects.
 for imageIndex = 1:size(test_images, 2)
     
-    image = train_images{1, imageIndex};
+    image = test_images{1, imageIndex};
     grayscale = single(rgb2gray(image));
     height = size(image, 1);
     width = size(image, 2);

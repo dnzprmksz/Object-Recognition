@@ -9,7 +9,7 @@ oldDir=pwd;
 cd(Cdir);
 for j=1:length(files)
     try
-%         cm = sprintf('mex %s',files(j).name);
+        cm = sprintf('mex %s',files(j).name);
         cm = sprintf('mex -largeArrayDims %s',files(j).name);
         disp(cm);
         eval(cm);
