@@ -4,6 +4,7 @@ addpath(genpath('lib/ncut/'));
 clear;
 load('Codebook.mat');
 
+ObjectCount = 8;
 CodebookSize = size(Codebook, 1);
 SegmentCount = 6;
 GridSize = 32;
