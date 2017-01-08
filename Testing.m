@@ -24,7 +24,7 @@ run(vlToolboxLocation);
 
 AllProbabilityMaps = cell(size(test_images,2),1);
 
-for imageIndex = 94:94
+for imageIndex = 94:94 %size(test_images,2)
     
     image = test_images{1, imageIndex};
     grayscale = single(rgb2gray(image));
@@ -87,8 +87,6 @@ for imageIndex = 94:94
         end
         ProbabilityMaps{i} = current_map;
     end
-    save('ProbabilityMaps','ProbabilityMaps');
     AllProbabilityMaps{imageIndex,1} = ProbabilityMaps;
+    save('AllProbabilityMaps','AllProbabilityMaps');
 end
-
-
