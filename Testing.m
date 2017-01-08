@@ -7,7 +7,8 @@ load('SVM_models.mat');
 
 ObjectCount = 8;
 CodebookSize = size(Codebook, 1);
-SegmentCount = 6;
+SegmentCountIndoor = 8;
+SegmentCountOutdoor = 4;
 GridSize = 32;
 
 % Get file locations for VL Feat Toolbox and data.
@@ -24,10 +25,19 @@ AllProbabilityMaps = cell(size(test_images,2),1);
 % representation and use SVM classifier to recognize the objects.
 for imageIndex = 1:size(test_images,2)
     
+    imageType = test_images{2, imageIndex};
     image = test_images{1, imageIndex};
     grayscale = single(rgb2gray(image));
     height = size(image, 1);
     width = size(image, 2);
+    
+    % Select segment count by looking image is whether indoor or outdoor.
+    % 0: Outdoor, 1: Indoor.
+    if imageType == 0
+        SegmentCount = SegmentCountOutdoor;
+    else
+        SegmentCount = SegmentCountIndoor;
+    end
     
     % Compute image segments with normalized cuts.
     ncutImage = double(rgb2gray(image));
@@ -64,27 +74,29 @@ for imageIndex = 1:size(test_images,2)
     % Use SVM classifier to compute the probability of each segment to
     % contain an instance of any object.
     
-    % Calculate the probability for each segment to include an object
     probability = zeros(SegmentCount, ObjectCount);
-    
-    for i=1:SegmentCount
-        for j=1:ObjectCount
-            [~, ~ , prob] = svmpredict([1], SegmentsBagOfWords(i,:), SVM_models{j}, '-b 1');
-            probability(i,j) = prob(1,1);
+    % Calculate the probability for each segment to include each object.
+    for i = 1:SegmentCount
+        for j = 1:ObjectCount
+            [~, ~ , prob] = svmpredict(1, SegmentsBagOfWords(i, :), SVM_models{j}, '-b 1');
+            probability(i, j) = prob(1, 1);
         end
     end
     
-    ProbabilityMaps = cell(1,ObjectCount);
-    
-    for i=1:ObjectCount
-        current_map = zeros(height,width);
-        for j=1:height
-            for k=1:width
-                current_map(j,k) = probability(SegmentLabels(j,k),i);
+    ProbabilityMaps = cell(1, ObjectCount);
+    % Construct the probability map of current image for each object.
+    for i = 1:ObjectCount
+        current_map = zeros(height, width);
+        for j = 1:height
+            for k = 1:width
+                current_map(j, k) = probability(SegmentLabels(j, k), i);
             end
         end
         ProbabilityMaps{i} = current_map;
     end
-    AllProbabilityMaps{imageIndex,1} = ProbabilityMaps;
-    save('AllProbabilityMaps','AllProbabilityMaps');
+    
+    % Append current image's probability maps to the global list.
+    AllProbabilityMaps{imageIndex, 1} = ProbabilityMaps;
 end
+
+save('AllProbabilityMaps', 'AllProbabilityMaps');
