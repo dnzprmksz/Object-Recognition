@@ -14,16 +14,15 @@ GridSize = 32;
 file = fopen('config.txt');
 DataLocation = fgetl(file);
 vlToolboxLocation = fgetl(file);
-
-% Bind VL Feat Toolbox to obtain SIFT feature descriptors.
 run(vlToolboxLocation);
 
 % Partition the dataset into two subsets as Training and Test.
 [~, ~, test_images, test_masks] = partitionDataset(DataLocation);
 
+AllProbabilityMaps = cell(size(test_images,2),1);
 % Segment each image to detect objects. Compute their Bag of Words
 % representation and use SVM classifier to recognize the objects.
-for imageIndex = 94:94
+for imageIndex = 1:size(test_images,2)
     
     image = test_images{1, imageIndex};
     grayscale = single(rgb2gray(image));
@@ -65,5 +64,27 @@ for imageIndex = 94:94
     % Use SVM classifier to compute the probability of each segment to
     % contain an instance of any object.
     
+    % Calculate the probability for each segment to include an object
+    probability = zeros(SegmentCount, ObjectCount);
     
+    for i=1:SegmentCount
+        for j=1:ObjectCount
+            [~, ~ , prob] = svmpredict([1], SegmentsBagOfWords(i,:), SVM_models{j}, '-b 1');
+            probability(i,j) = prob(1,1);
+        end
+    end
+    
+    ProbabilityMaps = cell(1,ObjectCount);
+    
+    for i=1:ObjectCount
+        current_map = zeros(height,width);
+        for j=1:height
+            for k=1:width
+                current_map(j,k) = probability(SegmentLabels(j,k),i);
+            end
+        end
+        ProbabilityMaps{i} = current_map;
+    end
+    AllProbabilityMaps{imageIndex,1} = ProbabilityMaps;
+    save('AllProbabilityMaps','AllProbabilityMaps');
 end

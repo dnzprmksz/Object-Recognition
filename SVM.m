@@ -36,4 +36,8 @@ for i=1:8
     SVM_models{i,1} = svmtrain(object_labels{i,1}, instance_matrix,  '-t 0 -b 1');
 end
 
+<<<<<<< HEAD
 save('SVM_models', 'SVM_models');
+=======
+save('SVM_models','SVM_models');
+>>>>>>> 369c5b9448d5591802af8261ba9d363f680f53f4
