@@ -3,22 +3,27 @@ addpath(genpath('lib/ncut/'));
 
 clear;
 load('Codebook.mat');
+load('SVM_models.mat');
 
 ObjectCount = 8;
 CodebookSize = size(Codebook, 1);
 SegmentCount = 6;
 GridSize = 32;
 
-% Get file location data.
+% Get file locations for VL Feat Toolbox and data.
 file = fopen('config.txt');
 DataLocation = fgetl(file);
+vlToolboxLocation = fgetl(file);
+
+% Bind VL Feat Toolbox to obtain SIFT feature descriptors.
+run(vlToolboxLocation);
 
 % Partition the dataset into two subsets as Training and Test.
 [~, ~, test_images, test_masks] = partitionDataset(DataLocation);
 
 % Segment each image to detect objects. Compute their Bag of Words
 % representation and use SVM classifier to recognize the objects.
-for imageIndex = 1:size(test_images, 2)
+for imageIndex = 94:94
     
     image = test_images{1, imageIndex};
     grayscale = single(rgb2gray(image));

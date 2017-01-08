@@ -1,3 +1,4 @@
 local/
 lib/vlfeat
 lib/libsvm
+samples/
