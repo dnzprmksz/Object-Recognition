@@ -10,11 +10,11 @@ function [output_args] = checkDistribution(input_args, ProjectRoot)
     person = 0;
     building = 0;
 
-    for i=1:188
+    for i = 1:188
         if mod(i,2) == 0
-            load(strcat(ProjectRoot,int2str(i),'.mat'));
+            load(strcat(ProjectRoot, int2str(i), '.mat'));
             l = length(masks);
-            for j=1:l
+            for j = 1:l
                 name = masks(j).class_name;
                 if strcmp(name,'screen') == 1
                     screen = screen + 1;
@@ -36,6 +36,4 @@ function [output_args] = checkDistribution(input_args, ProjectRoot)
             end
         end
     end
-
 end
-

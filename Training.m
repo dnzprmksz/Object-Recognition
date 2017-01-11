@@ -49,7 +49,7 @@ for imageIndex = 1:size(train_images, 2)
                 % gridImage = uint8(image(y_start:y_end, x_start:x_end));
                 x = (x_start + x_end) / 2;
                 y = (y_start + y_end) / 2;
-                grid = [y; x; GridSize; 0];
+                grid = [x; y; GridSize; 0];
                 
                 gridSum = sum(sum(mask(y_start:y_end, x_start:x_end)));
                 if gridSum > 0 % Mask touches to the grid, find and increment class id in histogram.
@@ -66,4 +66,4 @@ end
 save('ObjectHistograms', 'ObjectHistograms');
 
 % Train SVM classifier for each object and save the models.
-
+SVM

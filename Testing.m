@@ -1,5 +1,6 @@
-% Add segmentation/ncut library.
+% Add libraries.
 addpath(genpath('lib/ncut/'));
+addpath(genpath('lib/libsvm/'));
 
 clear;
 load('Codebook.mat');
@@ -45,7 +46,10 @@ for imageIndex = 1:size(test_images,2)
 
     % Show the segmented image. Adapted from library's demo.
     bw = edge(SegmentLabels, 0.01);
-    J1 = showmask(ncutImage, imdilate(bw, ones(2,2))); imagesc(J1); axis off
+    J1 = showmask(ncutImage, imdilate(bw, ones(2,2)));
+    % imagesc(J1); axis off
+    filename = strcat('samples/segmentations/test-', int2str(imageIndex), '.png');
+    imwrite(J1, filename);
     
     SegmentsBagOfWords = zeros(SegmentCount, CodebookSize);
     
@@ -61,7 +65,7 @@ for imageIndex = 1:size(test_images,2)
             % gridImage = uint8(image(y_start:y_end, x_start:x_end));
             x = (x_start + x_end) / 2;
             y = (y_start + y_end) / 2;
-            grid = [y; x; GridSize; 0];
+            grid = [x; y; GridSize; 0];
             
             % Get the descriptor of feature and corresponding codeword.
             [~, descriptor] = vl_sift(grayscale, 'frames', grid);
