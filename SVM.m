@@ -36,7 +36,7 @@ end
 SVM_models = cell(8, 1);
 
 for i = 1:8
-    SVM_models{i, 1} = svmtrain(object_labels{i, 1}, instance_matrix, '-t 0 -b 1');
+    SVM_models{i, 1} = svmtrain(object_labels{i, 1}, instance_matrix, '-t 0 -b 0');
 end
 
 save('SVM_models', 'SVM_models');
